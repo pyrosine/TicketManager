@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerListener;
 
 public class TicketManagerPlayerListener extends PlayerListener{ 
-	String user="minecraft",password="9d9029c2467eca";
+	String user="minecraft",password="testpass";
     public static Basic plugin;
     public boolean onCommand(CommandSender player, Command cmd, String commandLabel, String[] args){
     	if(cmd.getName().equalsIgnoreCase("ticket")){
