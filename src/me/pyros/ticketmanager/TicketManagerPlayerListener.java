@@ -31,6 +31,11 @@ public class TicketManagerPlayerListener extends PlayerListener{
 	            try{
 	            	con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/minecraft", user, password);
 	            	PreparedStatement st;
+	            	
+	            	st = con.prepareStatement("select * from ticketmanager_tickers where user='"+player+"' and active=1");
+	            	st.executeUpdate();
+	            	if(st.getResultSet().getInt(1)!=0) {return false;}
+	            	
 	            	st = con.prepareStatement("insert into ticketmanger_tickets (user,text) values ('"+player+"','"+data+"')");
 	            	st.executeUpdate();
 	            	int id = st.getResultSet().getInt("id");
