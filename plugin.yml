@@ -1,0 +1,12 @@
+name: TicketManager
+main: TicketManager.TicketManager
+version: 0.1
+commands:
+	ticket:
+		description: TicketManger menu
+		permission: ticketmanger.use
+		usage: /ticket open|info|close|active|help
+	t:
+		description: TicketManger menu
+		permission: ticketmanger.use
+		usage: /ticket open|info|close|active|help
