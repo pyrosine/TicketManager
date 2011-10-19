@@ -79,19 +79,39 @@ public class TicketManagerPlayerListener extends PlayerListener{
     		/////////////////////////////////////////////////////////////////////
     		if(player.hasPermission("ticketmanager.mod") && args[1]=="active"){
 	            Connection con = null;
-	            try{
-	            	con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/minecraft", user, password);
-	            	PreparedStatement getTickets;
-	            	getTickets = con.prepareStatement("select * from ticketmanager_tickets where active=1");
-	            	getTickets.executeUpdate();
-	            	getTickets.close();
-	            	ResultSet ticket_results = getTickets.getResultSet();
-	            	player.sendMessage("**********");
-	            	for(int l=0;l<10;l++){
-	            		player.sendMessage("[TM] User: "+ticket_results.getString("user")+". Ticket: "+ticket_results.getString("text"));
+        		PreparedStatement query;
+	            if(args[2]=="-all" || player.hasPermission("ticketmanager.op")){
+	            	try{
+	            		con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/minecraft", user, password);
+	            		query = con.prepareStatement("select * from ticketmanager_tickets where active=1");
+	            		query.executeUpdate();
+	            		query.close();
+	            		ResultSet ticket_results = query.getResultSet();
+	            		player.sendMessage("**********");
+	            		for(int l=0;l<10;l++){
+	            			player.sendMessage("[TM] User: "+ticket_results.getString("user")+". Ticket: "+ticket_results.getString("text"));
+	            		}
+	            		player.sendMessage("**********");
+	            	} catch (SQLException ex) {}
+	            }
+	            else{
+	            	if(player.hasPermission("ticketmanager.tags.protector")){
+	            		try {
+		            		con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/minecraft", user, password);
+							query = con.prepareStatement("select * from ticketmanager_tags where tag='protector'");
+							query.executeUpdate();
+							ResultSet tag_results = query.getResultSet();
+		            		player.sendMessage("**********");
+							for(int l=0;l<10;l++){
+								query = con.prepareStatement("select * from ticketmanager_tickets where id="+tag_results.getInt("id"));
+								query.executeUpdate();
+								player.sendMessage("[TM] User: "+query.getResultSet().getString("user")+". Ticket: "+query.getResultSet().getString("text"));
+							}
+		            		player.sendMessage("**********");
+						} catch (SQLException ex) {}
+	            		
 	            	}
-	            	player.sendMessage("**********");
-	            } catch (SQLException ex) {}
+	            }
     		}
     		/////////////////////////////////////////////////////////////////////
     		if(player.hasPermission("ticketmanager.mod") && args[1]=="close"){
